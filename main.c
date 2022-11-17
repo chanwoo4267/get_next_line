@@ -3,5 +3,9 @@
 
 int main()
 {
-	get_next_line_loop(0);
+	printf("%s", 	get_next_line(0));
+	printf("%s", 	get_next_line(0));
+	printf("%s", 	get_next_line(0));
+	printf("%s", 	get_next_line(0));
+	printf("%s", 	get_next_line(0));
 }
