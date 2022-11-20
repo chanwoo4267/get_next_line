@@ -6,7 +6,7 @@
 /*   By: chanwopa <chanwopa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 01:11:54 by chanwopa          #+#    #+#             */
-/*   Updated: 2022/11/21 07:11:36 by chanwopa         ###   ########seoul.kr  */
+/*   Updated: 2022/11/21 07:15:57 by chanwopa         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ t_list	*find_current_node(t_list **list_head, ssize_t fd)
 	return (new_node);
 }
 
-char	*solve_one(t_varcollection *dump, t_list **list_head, int fd, int mode)
+char	*non_full_read(t_varcollection *dump, t_list **list_head, \
+						int fd, int mode)
 {
 	dump->buffer[dump->read_bytes] = '\0';
 	if (mode == 0 || (mode == 1 && (dump->current)->str[0] == '\0'))
@@ -61,7 +62,7 @@ char	*solve_one(t_varcollection *dump, t_list **list_head, int fd, int mode)
 	return (dump->joined_str);
 }
 
-void	solve_two(t_varcollection *dump)
+void	full_read(t_varcollection *dump)
 {
 	dump->buffer[dump->read_bytes] = '\0';
 	dump->joined_str = ft_strjoin((dump->current)->str, dump->buffer);
@@ -80,14 +81,14 @@ char	*loop_function(t_varcollection *dump, t_list **list_head, int fd)
 	{
 		dump->read_bytes = read(fd, dump->buffer, BUFFER_SIZE);
 		if (dump->read_bytes < 0)
-			return (solve_one(dump, list_head, fd, 0));
+			return (non_full_read(dump, list_head, fd, 0));
 		else if (dump->read_bytes == 0)
-			return (solve_one(dump, list_head, fd, 1));
+			return (non_full_read(dump, list_head, fd, 1));
 		else if (dump->read_bytes < BUFFER_SIZE)
-			return (solve_one(dump, list_head, fd, 2));
+			return (non_full_read(dump, list_head, fd, 2));
 		else
 		{
-			solve_two(dump);
+			full_read(dump);
 			if (dump->flags == 0)
 				return (NULL);
 			else if (dump->flags == 1)
