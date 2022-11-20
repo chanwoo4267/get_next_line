@@ -6,7 +6,7 @@
 /*   By: chanwopa <chanwopa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 01:11:45 by chanwopa          #+#    #+#             */
-/*   Updated: 2022/11/21 05:00:25 by chanwopa         ###   ########seoul.kr  */
+/*   Updated: 2022/11/21 05:42:29 by chanwopa         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,9 @@ char	*ft_strlcpy(char *dst, const char *src, size_t count)
 	size_t	i;
 	size_t	l_count;
 
-	l_count = count;
 	i = 0;
+	if (!dst || !src)
+		return (NULL);
 	while (src[i])
 		i++;
 	l_count = i - count;

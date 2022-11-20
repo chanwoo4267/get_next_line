@@ -6,7 +6,7 @@
 /*   By: chanwopa <chanwopa@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 01:11:54 by chanwopa          #+#    #+#             */
-/*   Updated: 2022/11/21 04:58:30 by chanwopa         ###   ########seoul.kr  */
+/*   Updated: 2022/11/21 05:43:51 by chanwopa         ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,10 @@ char	*find_newline(char *joined_str, char **current_str)
 	char	*remain_str;
 
 	i = 0;
-	free(*current_str); // current_str 내부는 joined_str에 이미 새로 만들어져 들어감, 즉 필요없음
+	free(*current_str);
 	while (joined_str[i] && joined_str[i] != '\n')
 		i++;
-	if (!joined_str[i]) // no newline. so continue reading
+	if (!joined_str[i])
 	{
 		*current_str = joined_str;
 		return (joined_str);
@@ -59,9 +59,9 @@ char	*find_newline(char *joined_str, char **current_str)
 	else
 	{
 		return_str = malloc(sizeof(char) * (i + 2));
-		remain_str = ft_strlcpy(return_str, joined_str, i + 1); //널가드생략
-		/* return_str에 개행 포함한 앞부분만 복사해 넣음, remain_str은 뒤에 남은거 새로 동적할당
-			즉, 이제 joined_str은 해제해줘야함 */
+		remain_str = ft_strlcpy(return_str, joined_str, i + 1);
+		if (!remain_str)
+			return (NULL);
 		free(joined_str);
 		*current_str = remain_str;
 		return (return_str);
@@ -133,6 +133,8 @@ char	*get_next_line(int fd)
 				{
 					joined_str = ft_strjoin(current->str, buffer);
 					joined_str = find_newline(joined_str, &(current->str));
+					if (!joined_str)
+						return (NULL);
 					if (joined_str == current->str) // no newline
 					{
 						joined_str = ft_strdup(joined_str);
@@ -148,6 +150,8 @@ char	*get_next_line(int fd)
 				buffer[read_bytes] = '\0';
 				joined_str = ft_strjoin(current->str, buffer);
 				joined_str = find_newline(joined_str, &(current->str));
+				if (!joined_str)
+					return (NULL);
 				if (joined_str == current->str) // no newline
 				{
 					joined_str = ft_strdup(joined_str);
@@ -163,6 +167,8 @@ char	*get_next_line(int fd)
 			buffer[read_bytes] = '\0';
 			joined_str = ft_strjoin(current->str, buffer);
 			joined_str = find_newline(joined_str, &(current->str));
+			if (!joined_str)
+				return (NULL);
 			if (joined_str == current->str) // no newline
 				continue ;
 			else
